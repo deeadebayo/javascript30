@@ -5,9 +5,53 @@
 	<meta charset="UTF-8">
 	<title>JS Drum Kit</title>
 	<link rel="stylesheet" href="style.css">
+	<script src="js/paper-full.js"></script>
+	<script type="text/paperscript" canvas="homeCanvas">
+		var generatedColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+		
+		var keyData = {
+			a: {
+				color: generatedColor
+			},
+			s: {
+				color: 'generatedColor'
+			},
+			d: {
+				color: 'white'
+			}
+		}
+		
+		var circles =[]
+
+		function onKeyDown(event) {
+			if(keyData[event.key]) {
+				var maxPoint = new Point(view.size.width, view.size.height);
+				var randomPoint = Point.random();
+				var point = maxPoint * randomPoint;
+				var newCircle = new Path.Circle(point, 500);
+				newCircle.fillColor = keyData[event.key].color;
+	
+				circles.push(newCircle);
+			}
+		}
+
+		function onFrame(event) {
+			for (var i = 0; i < circles.length; i++) {
+				circles[i].fillColor.hue +=1;
+				circles[i].scale(.9);
+
+				if(circles[i].area < 1) {
+					circles[i].remove();
+					circles.splice(i, 1);
+				}
+			}
+		}
+
+	</script>
 </head>
 
 <body>
+	<canvas id="homeCanvas" resize></canvas>
 	<!--top row-->
 	<div class="keys">
 		<div data-key="81" class="key">
@@ -151,7 +195,7 @@
 	<audio data-key="78" src="sounds/strike.mp3"></audio>
 	<audio data-key="77" src="sounds/squiggle.mp3"></audio>
 
-	<script src="script.js"></script>
+	<script src="js/script.js"></script>
 </body>
 
 </html>
